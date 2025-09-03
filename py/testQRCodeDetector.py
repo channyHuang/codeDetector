@@ -1,62 +1,3 @@
-[toc]
-
-# QRCode Recognize
-QRCode二维码识别库效果简单对比
-| Language | Library | Result | Speed |
-|:---:|:---:|:---:|:---:|
-| c++ | [ZXing](https://github.com/zxing-cpp/zxing-cpp) | Good, 好，都能正常识别 | Good |
-| c | [ZBar](https://zbar.sourceforge.net/) | Build Bad | Normal |
-| c++/python | opencv+wechat | Normal, 一般，多个码只识别到其中一个 | Normal |
-| c++/python | cv2.QRCodeDetector | Normal, 一般，多个码识别失败 | Normal |
-| python | [qreader](https://github.com/Eric-Canas/qreader) | Good, 好，多个码能识别，但内容可能识别失败 | Low |
-| python | pyzbar | Bad, 差，略有倾斜的码都识别不了 | Normal |
-
-其中`cv2.wechat_qrcode_WeChatQRCode`需要加载官方预训练模型[opencv_3rdparty](https://github.com/WeChatCV/opencv_3rdparty.git)且需要安装`opencv-contrib-python`，不同于`cv2.QRCodeDetector`环境安装`opencv-python`
-
-# Result
-## 测试图像1——倾斜：pyzbar和cv2.QRCodeDetector()识别失败，out!
-![pyzbar_failed](./data/1_distort.jpg)
-## 测试图像2——一图多码：剩下的都能正常识别
-![multicode_normal](./data/2_multicode_normal.jpg)
-![multicode](./data/2_multicode.png)
-## 测试图像3——自定义一图多码：qreader和cv2.wechat_qrcode_WeChatQRCode识别失败，out!
-最终只有`ZXing`能都正常识别出来。
-
-![selfdefine](./data/3_selfdefine.jpg)
-
-# Source Code
-## ZXing
-```c++
-#include <opencv2/opencv.hpp>
-#include <opencv2/objdetect.hpp>
-#include <iostream>
-
-#include "ZXing/ReadBarcode.h"
-
-int detectZXing(cv::Mat &cvImage) {
-    int width = cvImage.cols, height = cvImage.rows;
-    printf("width = %d, height = %d\n", width, height);
-    auto image = ZXing::ImageView(cvImage.data, width, height, ZXing::ImageFormat::BGR);
-    auto options = ZXing::ReaderOptions().setFormats(ZXing::BarcodeFormat::Any);
-    auto barcodes = ZXing::ReadBarcodes(image, options);
-
-    std::cout << "Detect count: " << barcodes.size() << std::endl;
-    for (const auto& b : barcodes) {
-        std::cout << ZXing::ToString(b.format()) << ": " << b.text() << "\n";
-        std::cout << ZXing::ToString(b.position()) << std::endl;
-    }
-    return barcodes.size();
-}
-
-int main() {
-    std::string sImagePath = "../../data/3_selfdefine.jpg";
-    cv::Mat image = cv::imread(sImagePath);
-    int count = detectZXing(image);
-    return 0;
-}
-```
-## 其它
-```py
 import cv2
 import numpy as np
 import time
@@ -172,4 +113,3 @@ if __name__ == '__main__':
     # unit_test(cv2.imread('../data/2_multicode_normal.jpg'), detect_wechat)
     # multi_code failed, only one detect 
     # unit_test(cv2.imread('../data/2_multicode.png'), detect_wechat)
-```
