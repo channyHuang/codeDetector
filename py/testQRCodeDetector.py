@@ -94,22 +94,22 @@ if __name__ == '__main__':
     start_time = time.time()
 
     # failed
-    # unit_test(cv2.imread('../data/1_distort.jpg'), detect_pyzbar)
+    # unit_test(cv2.imread('../data/qrcode/1_distort.jpg'), detect_pyzbar)
 
     # failed
-    # unit_test(cv2.imread('../data/1_distort.jpg'), detect_opencv)
+    # unit_test(cv2.imread('../data/qrcode/1_distort.jpg'), detect_opencv)
 
     # multi_code success
     # unit_test(cv2.imread('1_distort.jpg'), detect_qreader)
-    # unit_test(cv2.imread('../data/2_multicode.png'), detect_qreader)
-    # unit_test(cv2.imread('../data/2_multicode_normal.jpg'), detect_qreader)
+    # unit_test(cv2.imread('../data/qrcode/2_multicode.png'), detect_qreader)
+    # unit_test(cv2.imread('../data/qrcode/2_multicode_normal.jpg'), detect_qreader)
     # multi_code failed, miss one text 
-    # unit_test(cv2.imread('../data/3_selfdefine.jpg'), detect_qreader)
+    # unit_test(cv2.imread('../data/qrcode/3_selfdefine.jpg'), detect_qreader)
     '''
     [None, 'This is Image 2'] [array([      30.58,      9.8294,      197.52,      171.39], dtype=float32), array([     257.03,      37.019,      388.42,      178.48], dtype=float32)]
     '''
 
     # multi_code success
-    # unit_test(cv2.imread('../data/2_multicode_normal.jpg'), detect_wechat)
+    # unit_test(cv2.imread('../data/qrcode/2_multicode_normal.jpg'), detect_wechat)
     # multi_code failed, only one detect 
-    # unit_test(cv2.imread('../data/2_multicode.png'), detect_wechat)
+    # unit_test(cv2.imread('../data/qrcode/2_multicode.png'), detect_wechat)

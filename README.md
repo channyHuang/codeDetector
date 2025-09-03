@@ -15,14 +15,28 @@ QRCode二维码识别库效果简单对比
 
 # Result
 ## 测试图像1——倾斜：pyzbar和cv2.QRCodeDetector()识别失败，out!
-![pyzbar_failed](./data/1_distort.jpg)
+![pyzbar_failed](data/qrcode/1_distort.jpg)
 ## 测试图像2——一图多码：剩下的都能正常识别
-![multicode_normal](./data/2_multicode_normal.jpg)
-![multicode](./data/2_multicode.png)
+![multicode_normal](data/qrcode/2_multicode_normal.jpg)
+![multicode](data/qrcode/2_multicode.png)
 ## 测试图像3——自定义一图多码：qreader和cv2.wechat_qrcode_WeChatQRCode识别失败，out!
 最终只有`ZXing`能都正常识别出来。
 
-![selfdefine](./data/3_selfdefine.jpg)
+![selfdefine](data/qrcode/3_selfdefine.jpg)
+
+# fiducial marker 
+[apriltag-imgs](https://github.com/AprilRobotics/apriltag-imgs)
+以`Family = tag36h11`为测试图像。
+
+| Language | Name | Result | Speed | Others |
+|:---:|:---:|:---:|:---:|:---:|
+| c++/python | [AprilTag](https://github.com/AprilRobotics/apriltag.git) | > 30x30 | Good | |
+| c++/python | ArUco | > 35x35, in opencv | Good | |
+| c++/python | WhyCode | | | pip install failed, 圆形标记 |
+| c++ | [TopoTag](https://herohuyongtao.github.io/research/publications/topo-tag/) | - | - | 只有windows库，不开源 |
+| c++ | [STag](https://github.com/manfredstoiber/stag) | - | SLOW | 圆形标记 |
+
+其中`ArUco`需要安装`opencv-contrib-python`，不同于其它环境安装`opencv-python`
 
 # Source Code
 ## ZXing
@@ -49,7 +63,7 @@ int detectZXing(cv::Mat &cvImage) {
 }
 
 int main() {
-    std::string sImagePath = "../../data/3_selfdefine.jpg";
+    std::string sImagePath = "../.data/qrcode/3_selfdefine.jpg";
     cv::Mat image = cv::imread(sImagePath);
     int count = detectZXing(image);
     return 0;
@@ -153,23 +167,23 @@ if __name__ == '__main__':
     start_time = time.time()
 
     # failed
-    # unit_test(cv2.imread('../data/1_distort.jpg'), detect_pyzbar)
+    # unit_test(cv2.imread('.data/qrcode/1_distort.jpg'), detect_pyzbar)
 
     # failed
-    # unit_test(cv2.imread('../data/1_distort.jpg'), detect_opencv)
+    # unit_test(cv2.imread('.data/qrcode/1_distort.jpg'), detect_opencv)
 
     # multi_code success
     # unit_test(cv2.imread('1_distort.jpg'), detect_qreader)
-    # unit_test(cv2.imread('../data/2_multicode.png'), detect_qreader)
-    # unit_test(cv2.imread('../data/2_multicode_normal.jpg'), detect_qreader)
+    # unit_test(cv2.imread('.data/qrcode/2_multicode.png'), detect_qreader)
+    # unit_test(cv2.imread('.data/qrcode/2_multicode_normal.jpg'), detect_qreader)
     # multi_code failed, miss one text 
-    # unit_test(cv2.imread('../data/3_selfdefine.jpg'), detect_qreader)
+    # unit_test(cv2.imread('.data/qrcode/3_selfdefine.jpg'), detect_qreader)
     '''
     [None, 'This is Image 2'] [array([      30.58,      9.8294,      197.52,      171.39], dtype=float32), array([     257.03,      37.019,      388.42,      178.48], dtype=float32)]
     '''
 
     # multi_code success
-    # unit_test(cv2.imread('../data/2_multicode_normal.jpg'), detect_wechat)
+    # unit_test(cv2.imread('.data/qrcode/2_multicode_normal.jpg'), detect_wechat)
     # multi_code failed, only one detect 
-    # unit_test(cv2.imread('../data/2_multicode.png'), detect_wechat)
+    # unit_test(cv2.imread('.data/qrcode/2_multicode.png'), detect_wechat)
 ```

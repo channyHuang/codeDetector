@@ -20,7 +20,7 @@ int detectZXing(cv::Mat &cvImage) {
 }
 
 int main() {
-    std::string sImagePath = "../../data/3_selfdefine.jpg";
+    std::string sImagePath = "../../data/qrcode/3_selfdefine.jpg";
     cv::Mat image = cv::imread(sImagePath);
     int count = detectZXing(image);
     return 0;
