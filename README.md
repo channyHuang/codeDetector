@@ -13,13 +13,13 @@ QRCode二维码识别库效果简单对比
 
 其中`cv2.wechat_qrcode_WeChatQRCode`需要加载官方预训练模型[opencv_3rdparty](https://github.com/WeChatCV/opencv_3rdparty.git)且需要安装`opencv-contrib-python`，不同于`cv2.QRCodeDetector`环境安装`opencv-python`
 
-# Result
-## 测试图像1——倾斜：pyzbar和cv2.QRCodeDetector()识别失败，out!
+## Result
+### 测试图像1——倾斜：pyzbar和cv2.QRCodeDetector()识别失败，out!
 ![pyzbar_failed](data/qrcode/1_distort.jpg)
-## 测试图像2——一图多码：剩下的都能正常识别
+### 测试图像2——一图多码：剩下的都能正常识别
 ![multicode_normal](data/qrcode/2_multicode_normal.jpg)
 ![multicode](data/qrcode/2_multicode.png)
-## 测试图像3——自定义一图多码：qreader和cv2.wechat_qrcode_WeChatQRCode识别失败，out!
+### 测试图像3——自定义一图多码：qreader和cv2.wechat_qrcode_WeChatQRCode识别失败，out!
 最终只有`ZXing`能都正常识别出来。
 
 ![selfdefine](data/qrcode/3_selfdefine.jpg)
@@ -37,6 +37,30 @@ QRCode二维码识别库效果简单对比
 | c++ | [STag](https://github.com/manfredstoiber/stag) | - | SLOW | 圆形标记 |
 
 其中`ArUco`需要安装`opencv-contrib-python`，不同于其它环境安装`opencv-python`
+
+# Super-Resolution
+以无人机定位地面上的apriltag点为需求，图像模糊检测tag失败，通过增加Super-Resolution操作，可以提升tag检测成功率。
+
+使用[visual-inertial-dataset](https://cvg.cit.tum.de/data/datasets/visual-inertial-dataset)中`dataset-calib-cam2_512_16.bag`包中的图像作为测试数据集。使用[Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN.git)做Super-Resolution。其中原图像使用apriltag和cv2.aruco均检测失败，而Super-Resolution新图像使用cv2.aruco可检测出一个id，apriltag依旧检测失败。
+
+![原图像](./data/tag/frame0001.jpg)
+![Super-Resolution新图像](./data/tag/frame0001_out.jpg)
+
+# PnP
+> b = (int)a c++/py 并不是四舍五入，而是取向0靠近的整数
+## apriltag
+返回结果按图像坐标系，图像左上角为原点
+```c++
+/*
+o--------------> x
+|
+|
+|
+|
+v
+y
+*/
+```
 
 # Source Code
 ## ZXing

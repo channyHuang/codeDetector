@@ -17,6 +17,21 @@ def combineImageHor(img1, img2):
     cv2.imwrite('combine.jpg', result)
     return result
 
+def combineImageVer(img1, img2):
+    h1, w1 = img1.shape[:2]
+    h2, w2 = img2.shape[:2]
+
+    new_width = max(w1, w2)
+    new_height = h1 + h2
+
+    result = np.zeros((new_height, new_width, 3), dtype=np.uint8)
+
+    result[0:h1, 0:w1] = img1 
+    result[h1:h1+h2, 0:w2] = img2  
+
+    cv2.imwrite('combine.jpg', result)
+    return result
+
 def irregular_parallelogram(image, intensity=0.2):
     """
     Create an irregular parallelogram distortion

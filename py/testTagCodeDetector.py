@@ -1,18 +1,22 @@
 import cv2
 import time
+import os
 
 def detect_apriltag(image):
     ap = True
     if ap == True:
         # python3 -m pip install pupil_apriltags -i Https://pypi.tuna.tsinghua.edu.cn/simple/
         import pupil_apriltags as apriltag
+        # import pyapriltags as apriltag
     else:
         # python3 -m pip install apriltag -i Https://pypi.tuna.tsinghua.edu.cn/simple/
         import apriltag as apriltag
 
     detector = None
     if ap == True:
-        detector = apriltag.Detector(families='tag36h11')
+        detector = apriltag.Detector(families='tag36h11', 
+                                    #  quad_decimate=1.0, quad_sigma=2.0, refine_edges=False, decode_sharpening = 0.0
+                                     )
     else:
         detector = apriltag.Detector(apriltag.DetectorOptions(families='tag36h11'))
 
@@ -23,6 +27,8 @@ def detect_apriltag(image):
     for r in results:
         tagID = str(r.tag_id)
         ids.append(tagID)
+
+        print('r', r)
         b = (tuple(r.corners[0].astype(int))[0], tuple(r.corners[0].astype(int))[1])
         c = (tuple(r.corners[1].astype(int))[0], tuple(r.corners[1].astype(int))[1])
         d = (tuple(r.corners[2].astype(int))[0], tuple(r.corners[2].astype(int))[1])
@@ -66,11 +72,13 @@ def unit_test(image, func):
 
 if __name__ == '__main__':
     start_time = time.time()
+    # image_name = '../data/tag/tag36_11_00568.png'
+    image_name = '../data/tag/frame0001_out.jpg'
 
-    image = cv2.imread('../data/tag/tag36_11_00568.png')
-    image = cv2.resize(image, (40, 40))  
+    image = cv2.imread(image_name)
+    # image = cv2.resize(image, (40, 40))  
     unit_test(image, detect_aruco)
 
-    image = cv2.imread('../data/tag/tag36_11_00568.png')
-    image = cv2.resize(image, (40, 40))  
+    image = cv2.imread(image_name)
+    # image = cv2.resize(image, (40, 40))  
     unit_test(image, detect_apriltag)
