@@ -41,10 +41,53 @@ QRCode二维码识别库效果简单对比
 # Super-Resolution
 以无人机定位地面上的apriltag点为需求，图像模糊检测tag失败，通过增加Super-Resolution操作，可以提升tag检测成功率。
 
-使用[visual-inertial-dataset](https://cvg.cit.tum.de/data/datasets/visual-inertial-dataset)中`dataset-calib-cam2_512_16.bag`包中的图像作为测试数据集。使用[Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN.git)做Super-Resolution。其中原图像使用apriltag和cv2.aruco均检测失败，而Super-Resolution新图像使用cv2.aruco可检测出一个id，apriltag依旧检测失败。
+使用[visual-inertial-dataset](https://cvg.cit.tum.de/data/datasets/visual-inertial-dataset)中`dataset-calib-cam2_512_16.bag`包中的图像作为测试数据集。使用[Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN.git)或[SwinIR](https://github.com/JingyunLiang/SwinIR.git)做Super-Resolution。其中原图像使用apriltag和cv2.aruco均检测失败，而Super-Resolution新图像使用cv2.aruco可检测出一个id，apriltag依旧检测失败。
 
 ![原图像](./data/tag/frame0001.jpg)
 ![Super-Resolution新图像](./data/tag/frame0001_out.jpg)
+
+通过调整`cv2.aruco`的参数可以提高/降低经过`Super-Resolution`处理后的图像帧的识别率。默认参数如下。
+```py
+    import cv2; [print(f"{attr}: {getattr(cv2.aruco.DetectorParameters(), attr)}") for attr in dir(cv2.aruco.DetectorParameters()) if not attr.startswith('_')]
+```
+```sh
+adaptiveThreshConstant: 7.0
+adaptiveThreshWinSizeMax: 23
+adaptiveThreshWinSizeMin: 3
+adaptiveThreshWinSizeStep: 10
+aprilTagCriticalRad: 0.1745329201221466
+aprilTagDeglitch: 0
+aprilTagMaxLineFitMse: 10.0
+aprilTagMaxNmaxima: 10
+aprilTagMinClusterPixels: 5
+aprilTagMinWhiteBlackDiff: 5
+aprilTagQuadDecimate: 0.0
+aprilTagQuadSigma: 0.0
+cornerRefinementMaxIterations: 30
+cornerRefinementMethod: 0
+cornerRefinementMinAccuracy: 0.1
+cornerRefinementWinSize: 5
+detectInvertedMarker: False
+errorCorrectionRate: 0.6
+markerBorderBits: 1
+maxErroneousBitsInBorderRate: 0.35
+maxMarkerPerimeterRate: 4.0
+minCornerDistanceRate: 0.05
+minDistanceToBorder: 3
+minGroupDistance: 0.20999999344348907
+minMarkerDistanceRate: 0.125
+minMarkerLengthRatioOriginalImg: 0.0
+minMarkerPerimeterRate: 0.03
+minOtsuStdDev: 5.0
+minSideLengthCanonicalImg: 32
+perspectiveRemoveIgnoredMarginPerCell: 0.13
+perspectiveRemovePixelPerCell: 4
+polygonalApproxAccuracyRate: 0.03
+readDetectorParameters: <built-in method readDetectorParameters of cv2.aruco.DetectorParameters object at 0x7f6df55c6e80>
+relativeCornerRefinmentWinSize: 0.30000001192092896
+useAruco3Detection: False
+writeDetectorParameters: <built-in method writeDetectorParameters of cv2.aruco.DetectorParameters object at 0x7f6df55c6e80>
+```
 
 # PnP
 > b = (int)a c++/py 并不是四舍五入，而是取向0靠近的整数
