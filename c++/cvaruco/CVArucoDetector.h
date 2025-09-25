@@ -59,12 +59,15 @@ public:
     int deinit(void* pHandle);
 
     CVArucoDetector();
+    
 private:
     cv::aruco::DetectorParameters createParamsDetect();
+    cv::aruco::RefineParameters createParamsRefine();
 
 private:
     static std::shared_ptr<CVArucoDetector> m_pInstance;
     ResultPool m_pool;
     cv::aruco::Dictionary m_stDictionary;
     cv::aruco::DetectorParameters m_stParamsDetect;
+    cv::aruco::RefineParameters m_stParamsRefine;
 };

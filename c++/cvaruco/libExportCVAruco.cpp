@@ -12,16 +12,18 @@ void* init() {
 }
 
 stIdsPoints* detect(void* pHandle, stFrame* pFrame) {
-#ifdef HIGH_VERSION
-    if (pHandle == nullptr || pFrame == nullptr) return nullptr;
-#else
-    if (pFrame == nullptr) return nullptr;
-#endif
+    if (pHandle == nullptr || pFrame == nullptr) {
+        printf("Error: input param is null\n");
+        return nullptr;
+    }
     return CVArucoDetector::getInstance()->detect(pHandle, pFrame);
 }
 
 Frame* drawResult(void* pHandle, stIdsPoints* pResult, stFrame* pFrame) {
-    if (pHandle == nullptr) return nullptr;
+    if (pHandle == nullptr || pResult == nullptr || pFrame == nullptr) {
+        printf("Error: input param is null\n");
+        return nullptr;
+    }
     return CVArucoDetector::getInstance()->drawResult(pHandle, pResult, pFrame);
 }
 

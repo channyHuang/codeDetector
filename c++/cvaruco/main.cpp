@@ -21,20 +21,22 @@ int main() {
     pFrame->pChar = new unsigned char[pFrame->size];
     // printf("Input image width = %d, height = %d, size = %d\n", image.cols, image.rows, pFrame->size);
     memcpy(pFrame->pChar, image.data, pFrame->size);
-
+    
     stIdsPoints *pResult = detect(pHandle, pFrame.get());
-    // if (pResult == nullptr) {
-    //     printf("nullptr\n");
-    // } else {
-    //     printf("not nullptr\n");
-    // }
-    // printf("Detect count = %d\n", pResult->count);
-    // stFrame* pNewFrame = drawResult(pHandle, pResult, pFrame.get());
+    if (pResult == nullptr) {
+        printf("result is nullptr\n");
+    } else {
+        printf("Detect count = %d\n", pResult->count);
+        
+    }
+    stFrame* pNewFrame = drawResult(pHandle, pResult, pFrame.get());
+    if (pNewFrame != nullptr) {
+        printf("pNewFrame %d %d %d\n ", pNewFrame->col, pNewFrame->row, pNewFrame->size);
+    }
 
-    // printf("pNewFrame %d %d %d\n ", pNewFrame->col, pNewFrame->row, pNewFrame->size);
-    // memcpy(image.data, pNewFrame->pChar, pNewFrame->size);
-    // cv::imshow("res", image);
-    // cv::waitKey(3000);
+    memcpy(image.data, pNewFrame->pChar, pNewFrame->size);
+    cv::imshow("res", image);
+    cv::waitKey(1000);
 
     return 0;
 }
