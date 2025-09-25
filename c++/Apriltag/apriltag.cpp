@@ -20,8 +20,8 @@ int detectApriltag(cv::Mat &cvImage) {
         exit(-1);
     }
 
-    td->quad_decimate = 1; // up/downsampling, > 1
-    td->quad_sigma = 0; // gaussian blur, > 0
+    td->quad_decimate = 3.0; // up/downsampling, > 1
+    td->quad_sigma = 0.0; // gaussian blur, > 0
     td->nthreads = 1;
     td->debug = false;
     td->refine_edges = true;
@@ -32,7 +32,7 @@ int detectApriltag(cv::Mat &cvImage) {
         printf("Unable to create the %d threads requested.\n",td->nthreads);
         exit(-1);
     }
-    printf("size = %d\n", zarray_size(detections));
+    printf("detect result count = %d\n", zarray_size(detections));
     // Draw detection outlines
     for (int i = 0; i < zarray_size(detections); i++) {
         apriltag_detection_t *det;
@@ -44,9 +44,9 @@ int detectApriltag(cv::Mat &cvImage) {
 }
 
 int main() {
-    std::string sImagePath = "tag36_11_00168.png";
+    std::string sImagePath = "frame0001.jpg_SwinIR.png";
     cv::Mat image = cv::imread(sImagePath);
-    cv::resize(image, image, cv::Size(40, 40), 0, 0, cv::INTER_LINEAR);
+    // cv::resize(image, image, cv::Size(40, 40), 0, 0, cv::INTER_LINEAR);
     int count = detectApriltag(image);
     return 0;
 }

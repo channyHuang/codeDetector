@@ -41,7 +41,7 @@ QRCode二维码识别库效果简单对比
 # Super-Resolution
 以无人机定位地面上的apriltag点为需求，图像模糊检测tag失败，通过增加Super-Resolution操作，可以提升tag检测成功率。
 
-使用[visual-inertial-dataset](https://cvg.cit.tum.de/data/datasets/visual-inertial-dataset)中`dataset-calib-cam2_512_16.bag`包中的图像作为测试数据集。使用[Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN.git)或[SwinIR](https://github.com/JingyunLiang/SwinIR.git)做Super-Resolution。其中原图像使用apriltag和cv2.aruco均检测失败，而Super-Resolution新图像使用cv2.aruco可检测出一个id，apriltag依旧检测失败。
+使用[visual-inertial-dataset](https://cvg.cit.tum.de/data/datasets/visual-inertial-dataset)中`dataset-calib-cam2_512_16.bag`包中的图像作为测试数据集。使用[Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN.git)或[SwinIR](https://github.com/JingyunLiang/SwinIR.git)或[DeepDeblur-PyTorch](https://github.com/SeungjunNah/DeepDeblur-PyTorch)做Super-Resolution。其中原图像使用apriltag和cv2.aruco均检测失败，而Super-Resolution新图像使用cv2.aruco可检测出一个id，apriltag依旧检测失败。
 
 ![原图像](./data/tag/frame0001.jpg)
 ![Super-Resolution新图像](./data/tag/frame0001_out.jpg)
@@ -88,6 +88,10 @@ relativeCornerRefinmentWinSize: 0.30000001192092896
 useAruco3Detection: False
 writeDetectorParameters: <built-in method writeDetectorParameters of cv2.aruco.DetectorParameters object at 0x7f6df55c6e80>
 ```
+
+查看Apriltag的源码发现默认检测hamming距离最大为3。相当于精确匹配了。。。
+
+而opencv的arucoDetector在c++中默认安装的不包含，需要勾选opencv_contrib源码编译安装。
 
 # PnP
 > b = (int)a c++/py 并不是四舍五入，而是取向0靠近的整数
