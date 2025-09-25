@@ -11,6 +11,22 @@ void* init() {
     return CVArucoDetector::getInstance()->init();
 }
 
+int setParams(void* pHandle, const char* pData, size_t nDataLen) {
+    if (pHandle == nullptr || pData == nullptr || nDataLen <= 0) {
+        printf("Error: input param is null\n");
+        return -1;
+    }
+    return CVArucoDetector::getInstance()->setParams(pHandle, pData, nDataLen);
+}
+
+int updateParams(void* pHandle, const char* pDetectParamFile, const char* pRefineParamFile) {
+    if (pHandle == nullptr) {
+        printf("Error: input param is null\n");
+        return -1;
+    }
+    return CVArucoDetector::getInstance()->updateParams(pHandle, pDetectParamFile, pRefineParamFile);
+}
+
 stIdsPoints* detect(void* pHandle, stFrame* pFrame) {
     if (pHandle == nullptr || pFrame == nullptr) {
         printf("Error: input param is null\n");

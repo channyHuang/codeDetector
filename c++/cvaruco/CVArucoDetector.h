@@ -54,6 +54,10 @@ public:
     virtual ~CVArucoDetector();
 
     void* init();
+    int setParams(void* pHandle, const char* pJsonData, size_t nJsonLen);
+    int updateParams(void* pHandle, 
+                    const char* pDetectParamFile = nullptr, 
+                    const char* pRefineParamFile = nullptr);
     stIdsPoints* detect(void* pHandle, stFrame* pFrame = nullptr);
     stFrame* drawResult(void* pHandle, stIdsPoints* pResult, stFrame* pFrame);
     int deinit(void* pHandle);

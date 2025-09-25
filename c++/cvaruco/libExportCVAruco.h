@@ -54,6 +54,11 @@ typedef struct stIdsPoints {
 // ======================================
 // init
 D_EXTERN_C D_SHARE_EXPORT void* init();
+// set params
+D_EXTERN_C D_SHARE_EXPORT int setParams(void* pHandle, const char* pData, size_t nDataLen);
+D_EXTERN_C D_SHARE_EXPORT int updateParams(void* pHandle, 
+                                            const char* pDetectParamFile = nullptr, 
+                                            const char* pRefineParamFile = nullptr);
 // detect
 D_EXTERN_C D_SHARE_EXPORT stIdsPoints* detect(void* pHandle, stFrame* pFrame);
 // draw
