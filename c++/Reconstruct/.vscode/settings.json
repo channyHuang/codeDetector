@@ -1,8 +1,0 @@
-{
-    "files.associations": {
-        "camera": "cpp",
-        "export": "cpp",
-        "sstream": "cpp",
-        "core": "cpp"
-    }
-}

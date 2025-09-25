@@ -43,5 +43,6 @@
 build
 bin
 .vscode/*
+*/.vscode
 
 */__pycache__
