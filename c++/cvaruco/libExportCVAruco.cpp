@@ -7,7 +7,7 @@
 
 extern "C"
 // ======================================
-void* init() {
+void* initCVAruco() {
     return CVArucoDetector::getInstance()->init();
 }
 
@@ -43,7 +43,7 @@ Frame* drawResult(void* pHandle, stIdsPoints* pResult, stFrame* pFrame) {
     return CVArucoDetector::getInstance()->drawResult(pHandle, pResult, pFrame);
 }
 
-int deinit(void* pHandle) {
+int deinitCVAruco(void* pHandle) {
     if (pHandle == nullptr) return -1;
     return CVArucoDetector::getInstance()->deinit(pHandle);
 }

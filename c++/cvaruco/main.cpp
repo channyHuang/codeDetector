@@ -52,12 +52,16 @@ void setParamsOneByOne(void* pHandle, cv::Mat &image) {
     }
 }
 
-int main() {
+int main(int argc, char** argv) {
+    std::string sImageName = "../../../data/tag/frame_SwinIR/frame0001.jpg_SwinIR.png";
+    if (argc >= 2) {
+        sImageName = std::string(argv[1]);
+    }
+    printf("sImageName = [%s]\n", sImageName.c_str());
     std::cout << "OpenCV version: " << CV_VERSION << std::endl;
+    cv::Mat image = cv::imread(sImageName);
 
-    cv::Mat image = cv::imread("../../../data/tag/frame_SwinIR/frame0001.jpg_SwinIR.png");
-
-    void* pHandle = init();
+    void* pHandle = initCVAruco();
 
     // setParamsOneByOne(pHandle, image);
     detect(pHandle, image);

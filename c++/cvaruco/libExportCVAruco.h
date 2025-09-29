@@ -1,6 +1,6 @@
 
-#ifndef LIBEXPORTSTREAM_H
-#define LIBEXPORTSTREAM_H
+#ifndef LIBEXPORTCVARUCO_H
+#define LIBEXPORTCVARUCO_H
 
 #include <string.h>
 #include <string>
@@ -53,7 +53,7 @@ typedef struct stIdsPoints {
 
 // ======================================
 // init
-D_EXTERN_C D_SHARE_EXPORT void* init();
+D_EXTERN_C D_SHARE_EXPORT void* initCVAruco();
 // set params
 D_EXTERN_C D_SHARE_EXPORT int setParams(void* pHandle, const char* pData, size_t nDataLen);
 D_EXTERN_C D_SHARE_EXPORT int updateParams(void* pHandle, 
@@ -64,6 +64,6 @@ D_EXTERN_C D_SHARE_EXPORT stIdsPoints* detect(void* pHandle, stFrame* pFrame);
 // draw
 D_EXTERN_C D_SHARE_EXPORT Frame* drawResult(void* pHandle, stIdsPoints* pResult, stFrame* pFrame);
 // deinit
-D_EXTERN_C D_SHARE_EXPORT int deinit(void* pHandle);
+D_EXTERN_C D_SHARE_EXPORT int deinitCVAruco(void* pHandle);
 
 #endif // LIBEXPORTCVARUCO_H

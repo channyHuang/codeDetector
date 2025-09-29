@@ -43,8 +43,11 @@ int detectApriltag(cv::Mat &cvImage) {
     return 0;
 }
 
-int main() {
+int main(int argc, char** argv) {
     std::string sImagePath = "frame0001.jpg_SwinIR.png";
+    if (argc >= 2) {
+        sImagePath = std::string(argv[1]);
+    }
     cv::Mat image = cv::imread(sImagePath);
     // cv::resize(image, image, cv::Size(40, 40), 0, 0, cv::INTER_LINEAR);
     int count = detectApriltag(image);
