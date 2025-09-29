@@ -193,7 +193,7 @@ stIdsPoints* CVArucoDetector::detect(void* pHandle, stFrame* pFrame) {
 
     stIdsPoints* pResult = m_pool.get();
     if (ids.size() <= 0 || ids.size() != corners.size()) {
-        printf("Detect Success but None\n");
+        // printf("Detect Success but None\n");
         return pResult;
     }
 
@@ -234,7 +234,7 @@ stIdsPoints* CVArucoDetector::detect(void* pHandle, stFrame* pFrame) {
 }
 
 stFrame* CVArucoDetector::drawResult(void* pHandle, stIdsPoints* pResult, stFrame* pFrame) {
-    printf("CVArucoDetector::drawResult pFrame.size = (%d, %d), result.count = %d\n", pFrame->row, pFrame->col, pResult->count);
+    // printf("CVArucoDetector::drawResult pFrame.size = (%d, %d), result.count = %d\n", pFrame->row, pFrame->col, pResult->count);
     if ((pResult->count == 0) && (pResult->reject_count == 0)) return pFrame;
     cv::Mat image(pFrame->row, pFrame->col, CV_8UC3, pFrame->pChar);
     try {
