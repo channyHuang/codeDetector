@@ -46,7 +46,7 @@ cv::aruco::DetectorParameters CVArucoDetector::createParamsDetect() {
     stParamsDetect.markerBorderBits = 1;
     stParamsDetect.perspectiveRemovePixelPerCell = 40;
     stParamsDetect.perspectiveRemoveIgnoredMarginPerCell = 0.15;
-// error refine
+    // error refine
     stParamsDetect.errorCorrectionRate = 0.8; 
     // detect mode
     stParamsDetect.useAruco3Detection = true;
@@ -88,13 +88,27 @@ void* CVArucoDetector::init() {
 }
 
 template<typename TV, typename TS>
-int setEachParams(const std::string& key, TV value, TS st) {
-    if (strcmp(key.c_str(), "perspectiveRemovePixelPerCell") == 0) {
-        st.perspectiveRemovePixelPerCell = value;
-    } else if (strcmp(key.c_str(), "errorCorrectionRate") == 0) {
-        st.errorCorrectionRate = value;
-    } else if (strcmp(key.c_str(), "errorCorrectionRate") == 0) {
-        st.errorCorrectionRate = value;
+int setEachParams(const std::string& key, TV value, TS &st) {
+    if constexpr (std::is_same_v<TS, cv::aruco::DetectorParameters>) {
+        if (strcmp(key.c_str(), "perspectiveRemovePixelPerCell") == 0) {
+            st.perspectiveRemovePixelPerCell = value;
+        } else if (strcmp(key.c_str(), "adaptiveThreshWinSizeMin") == 0) {
+            st.adaptiveThreshWinSizeMin = value;
+        } else if (strcmp(key.c_str(), "errorCorrectionRate") == 0) {
+            st.errorCorrectionRate = value;
+        } else if (strcmp(key.c_str(), "minDistanceToBorder") == 0) {
+            st.minDistanceToBorder = value;
+        } else {
+            return -1;
+        }
+    } else if constexpr (std::is_same_v<TS, cv::aruco::RefineParameters>) {
+        if (strcmp(key.c_str(), "minRepDistance") == 0) {
+            st.minRepDistance = value;
+        } else if (strcmp(key.c_str(), "checkAllOrders") == 0) {
+            st.checkAllOrders = value;
+        }  else {
+            return -1;
+        }
     } else {
         return -1;
     }
@@ -108,8 +122,6 @@ int CVArucoDetector::updateParams(void* pHandle, const char* pDetectParamFile, c
         printf("Error in detect input handle...\n");
         return -1;
     }
-    m_stParamsDetect = pDetector->getDetectorParameters();
-    m_stParamsRefine = pDetector->getRefineParameters();
     
     cv::FileStorage fs("params_detect.json", cv::FileStorage::READ);
     if (!fs.isOpened()) {
@@ -132,15 +144,40 @@ int CVArucoDetector::updateParams(void* pHandle, const char* pDetectParamFile, c
     return success ? 0 : -1;
 }
 
+int CVArucoDetector::outputParams(void* pHandle, const char* pDetectParamName, const char* pRefineParamName) {
+    cv::aruco::ArucoDetector* pDetector = static_cast<cv::aruco::ArucoDetector*>(pHandle);
+    if (pDetector == nullptr) {
+        printf("Error in detect input handle...\n");
+        return -1;
+    }
+    int res = 0;
+    if (pDetectParamName != nullptr) {
+        cv::FileStorage fs(std::string(pDetectParamName), cv::FileStorage::WRITE);
+        if (fs.isOpened()) {
+            cv::aruco::DetectorParameters stParamsDetect = pDetector->getDetectorParameters();
+            stParamsDetect.writeDetectorParameters(fs);
+        } else {
+            res = -1;
+        }
+    }
+    if (pRefineParamName != nullptr) {
+        cv::FileStorage fs_refine(pRefineParamName, cv::FileStorage::WRITE);
+        if (fs_refine.isOpened()) {
+            cv::aruco::RefineParameters stParamsRefine = pDetector->getRefineParameters();
+            stParamsRefine.writeRefineParameters(fs_refine);
+        } else {
+            res = -1;
+        }
+    }
+    return res;
+}
+
 int CVArucoDetector::setParams(void* pHandle, const char* pJsonData, size_t nJsonLen) {
     cv::aruco::ArucoDetector* pDetector = static_cast<cv::aruco::ArucoDetector*>(pHandle);
     if (pDetector == nullptr) {
         printf("Error in detect input handle...\n");
         return -1;
     }
-
-    m_stParamsDetect = pDetector->getDetectorParameters();
-    m_stParamsRefine = pDetector->getRefineParameters();
 
     nlohmann::json stJsonParams = nlohmann::json::parse(pJsonData, pJsonData + nJsonLen);
     if (stJsonParams.empty()) {
@@ -150,24 +187,20 @@ int CVArucoDetector::setParams(void* pHandle, const char* pJsonData, size_t nJso
     if (stJsonParams.contains("detect")) {
         nlohmann::json stJsonParamsDetect = stJsonParams["detect"];
         for (auto item : stJsonParamsDetect.items()) {
-            std::string key = item.key();
-
-            setEachParams(key, item.value(), m_stParamsDetect);
+            std::string sKey = item.key();
+            setEachParams(sKey, item.value(), m_stParamsDetect);
         }
     }
     if (stJsonParams.contains("refine")) {
         nlohmann::json stJsonParamsRefine = stJsonParams["refine"];
+        for (auto item : stJsonParamsRefine.items()) {
+            std::string sKey = item.key();
+            setEachParams(sKey, item.value(), m_stParamsRefine);
+        }
     }
+    pDetector->setDetectorParameters(m_stParamsDetect);
+    pDetector->setRefineParameters(m_stParamsRefine);
     // printf("CVArucoDetector::setParams success\n");
-
-    // cv::FileStorage fs("params_detect.json", cv::FileStorage::WRITE);
-    // if (fs.isOpened()) {
-    //     m_stParamsDetect.writeDetectorParameters(fs);
-    // }
-    // cv::FileStorage fs_refine("params_refine.json", cv::FileStorage::WRITE);
-    // if (fs_refine.isOpened()) {
-    //     m_stParamsRefine.writeRefineParameters(fs_refine);
-    // }
     return 0;
 }
 

@@ -58,6 +58,7 @@ public:
     int updateParams(void* pHandle, 
                     const char* pDetectParamFile = nullptr, 
                     const char* pRefineParamFile = nullptr);
+    int outputParams(void* pHandle, const char* pDetectParamName = nullptr, const char* pRefineParamName = nullptr);
     stIdsPoints* detect(void* pHandle, stFrame* pFrame = nullptr);
     stFrame* drawResult(void* pHandle, stIdsPoints* pResult, stFrame* pFrame);
     int deinit(void* pHandle);

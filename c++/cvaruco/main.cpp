@@ -3,6 +3,7 @@
 #include <memory>
 #include <iostream>
 #include <filesystem>
+#include <chrono>
 
 #include <opencv2/opencv.hpp>
 #include "json.hpp"
@@ -60,8 +61,18 @@ void testSingleImage(const std::string& sImageName) {
 
     void* pHandle = initCVAruco();
 
-    // setParamsOneByOne(pHandle, image);
-    detect(pHandle, image);
+    for (int i = 1; i < 100; ++i) {
+        nlohmann::json stJsonData, stJsonDetectData;
+        stJsonDetectData["perspectiveRemovePixelPerCell"] = i;
+        stJsonData["detect"] = stJsonDetectData;
+        std::string sJson = stJsonData.dump();
+
+        auto res = setParams(pHandle, sJson.c_str(), sJson.length());
+        int count = detect(pHandle, image);
+        if (count > 0) {
+            printf("param [%d] count [%d]\n", i, count);
+        }
+    }
 }
 
 void testFolder(const std::string& sDirName) {
@@ -81,9 +92,10 @@ void testFolder(const std::string& sDirName) {
 }
 
 int main(int argc, char** argv) {
+    auto start = std::chrono::high_resolution_clock::now();
     std::cout << "OpenCV version: " << CV_VERSION << std::endl;
 
-    if (false) {
+    if (true) {
         std::string sImageName = "../../../data/tag/frame_SwinIR/frame0001.jpg_SwinIR.png";
         if (argc >= 2) {
             sImageName = std::string(argv[1]);
@@ -91,13 +103,18 @@ int main(int argc, char** argv) {
         testSingleImage(sImageName);
     }
 
-    {
+    if (false) {
         std::string sDirName = "../../../data/tag/frame_SwinIR/";
         if (argc >= 2) {
             sDirName = std::string(argv[1]);
         }
         testFolder(sDirName);
     }
-    
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+    std::cout << "Time taken: " << duration.count() << " microseconds" << std::endl;
+    std::cout << "Time taken: " << duration.count() / 1000.0 << " milliseconds" << std::endl;
+    std::cout << "Time taken: " << duration.count() / 1000.0 / 1000.0 << " seconds" << std::endl;
+
     return 0;
 }
