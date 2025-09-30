@@ -2,6 +2,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.8.2)
 
 project(PnP)
 
+find_package(OpenCV REQUIRED)
 find_package(Boost REQUIRED)
 find_package(glog REQUIRED)
 find_package(PoseLib REQUIRED)
@@ -11,8 +12,8 @@ set(CERES_INCLUDE_DIR "/usr/local/include")
 set(GTEST_DIR "/usr/local/include/gtest")
 
 FILE(GLOB FILES_C "*.cpp" "*.cc")
-FILE(GLOB FILES_CC ${CMAKE_CURRENT_SOURCE_DIR}/include/*.cc ${CMAKE_CURRENT_SOURCE_DIR}/include/utils/*.cc)
-FILE(GLOB FILES_H "*.h" "*.inl")
+FILE(GLOB FILES_CC ${CMAKE_CURRENT_SOURCE_DIR}/include/*.cc ${CMAKE_CURRENT_SOURCE_DIR}/include/utils/*.cc )
+FILE(GLOB FILES_H "*.h" "*.hpp" "*.inl" ${CMAKE_CURRENT_SOURCE_DIR}/includes/*.h)
 
 # set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
@@ -28,6 +29,8 @@ include_directories(${PROJECT_NAME}
   ${CERES_INCLUDE_DIR}
 	${GLOG_INCLUDE_DIRS}
 	${CMAKE_CURRENT_SOURCE_DIR}/include
+	${CMAKE_CURRENT_SOURCE_DIR}/includes
+  ${OpenCV_INCLUDE_DIRS}
   ${GTEST_DIR}
 	)
 
@@ -58,4 +61,6 @@ target_link_libraries(${PROJECT_NAME}
   PoseLib
   gtest
   pthread
+
+  CVAruco
 )

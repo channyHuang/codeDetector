@@ -1,6 +1,6 @@
 
-#ifndef LIBEXPORTSTREAM_H
-#define LIBEXPORTSTREAM_H
+#ifndef LIBEXPORTPNP_H
+#define LIBEXPORTPNP_H
 
 #include <string.h>
 #include <string>
@@ -32,10 +32,10 @@
 
 // ======================================
 // init
-D_EXTERN_C D_SHARE_EXPORT int init(float nFocalLength = 190.97, int nWidth = 1024, int nHeight = 1024);
+D_EXTERN_C D_SHARE_EXPORT int initPnP(float nFocalLength = 190.97, int nWidth = 1024, int nHeight = 1024);
 // estimate 
-D_EXTERN_C D_SHARE_EXPORT int estimate(float** pPoint2D, size_t nPoint2D, float** pPoint3D, size_t nPoint3D, float** pM);
+D_EXTERN_C D_SHARE_EXPORT int estimatePnP(float** pPoint2D, size_t nPoint2D, float** pPoint3D, size_t nPoint3D, float** pM);
 // deinit
-D_EXTERN_C D_SHARE_EXPORT int deinit();
+D_EXTERN_C D_SHARE_EXPORT int deinitPnP();
 
 #endif // LIBEXPORTPNP_H

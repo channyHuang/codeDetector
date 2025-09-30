@@ -1,4 +1,4 @@
-#include "Estimator.h"
+#include "EstimatorCol.h"
 
 #include <vector>
 #include <string.h>
@@ -10,39 +10,39 @@
 
 using namespace colmap;
 
-Estimator* Estimator::m_pInstance = nullptr;
+EstimatorCol* EstimatorCol::m_pInstance = nullptr;
 
-Estimator* Estimator::getInstance() {
+EstimatorCol* EstimatorCol::getInstance() {
     if (m_pInstance == nullptr) {
-        m_pInstance = new Estimator();
+        m_pInstance = new EstimatorCol();
     }
     return m_pInstance;
 }
 
-Estimator::Estimator() {}
+EstimatorCol::EstimatorCol() {}
 
-Estimator::~Estimator() {}
+EstimatorCol::~EstimatorCol() {}
 
-int Estimator::init(float nFocalLength, int nWidth, int nHeight) {
+int EstimatorCol::init(float nFocalLength, int nWidth, int nHeight) {
     stCamera = colmap::Camera::CreateFromModelId(
       kInvalidCameraId, CameraModelId::kPinhole, nFocalLength, nWidth, nHeight);
     return 0;
 }
 
-int Estimator::deinit() {}
+int EstimatorCol::deinit() {}
 
-int Estimator::estimate(float** pPoint2D, size_t nPoint2D, 
+int EstimatorCol::estimate(float** pPoint2D, size_t nPoint2D, 
                         float** pPoint3D, size_t nPoint3D,
                         float** pM) {
     int res = estimateEPnP(pPoint2D, nPoint2D, pPoint3D, nPoint3D, pM);
-    if (res) {
-        return 0;
+    if (res != 0) {
+        return res;
     }
     // 
     return 0;           
 }
 
-int Estimator::estimateEPnP(float** pPoint2D, size_t nPoint2D, 
+int EstimatorCol::estimateEPnP(float** pPoint2D, size_t nPoint2D, 
                         float** pPoint3D, size_t nPoint3D,
                         float** pM) {
     std::vector<Eigen::Vector3d> points3D;

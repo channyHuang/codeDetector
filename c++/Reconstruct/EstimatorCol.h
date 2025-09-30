@@ -2,11 +2,11 @@
 
 #include "camera.h"
 
-class Estimator {
+class EstimatorCol {
 public:
-    Estimator();
-    virtual ~Estimator();
-    static Estimator* getInstance();
+    EstimatorCol();
+    virtual ~EstimatorCol();
+    static EstimatorCol* getInstance();
 
     int init(float nFocalLength, int nWidth, int nHeight);
     int deinit();
@@ -21,6 +21,6 @@ private:
                         float** pM);
 
 private:
-    static Estimator* m_pInstance;
+    static EstimatorCol* m_pInstance;
     colmap::Camera stCamera;
 };
